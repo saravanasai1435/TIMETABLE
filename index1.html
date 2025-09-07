@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Timetable Manager</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: cyan;
+      margin: 0;
+      padding: 20px;
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    .container {
+      max-width: 1000px;
+      margin: auto;
+    }
+    .button-group button {
+      margin: 5px;
+    }
+    .hidden {
+      display: none;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    table, th, td {
+      border: 1px solid black;
+    }
+    th, td {
+      padding: 10px;
+      text-align: center;
+    }
+    select, input[type="text"] {
+      margin: 5px;
+    }
+    .login-form, .edit-controls, .add-remove {
+      margin-top: 20px;
+      text-align: center;
+    }
+    .timetable-selector {
+      margin: 20px 0;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>School Timetable Viewer & Editor</h1>
+
+    <div class="login-form">
+      <h3>Login for Timetable Committee / Principal</h3>
+      <input type="text" id="username" placeholder="Username" />
+      <input type="password" id="password" placeholder="Password" />
+      <button onclick="login()">Login</button>
+    </div>
+
+    <div class="add-remove hidden" id="addRemoveSection">
+      <h3>Add or Remove Class/Staff</h3>
+      <input type="text" id="newClass" placeholder="New Class Name">
+      <button onclick="addClass()">Add Class</button>
+      <select id="removeClassSelect"></select>
+      <button onclick="removeClass()">Remove Class</button><br><br>
+
+      <input type="text" id="newStaff" placeholder="New Staff Name">
+      <button onclick="addStaff()">Add Staff</button>
+      <select id="removeStaffSelect"></select>
+      <button onclick="removeStaff()">Remove Staff</button>
+    </div>
+
+    <div class="edit-controls hidden" id="editControls">
+      <button onclick="startEdit()">Edit Timetable</button>
+    </div>
+
+    <div class="timetable-selector">
+      <h3>View Timetable</h3>
+      <button onclick="selectType('class')">View by Class</button>
+      <button onclick="selectType('staff')">View by Staff</button>
+      <div id="dropdownContainer"></div>
+    </div>
+
+    <div id="timetableContainer"></div>
+  </div>
+
+  <script>
+    const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+    const hours = ["9:30", "10:30", "11:30", "12:30", "Lunch", "2:00", "3:00", "4:00"];
+    const timetable = {};
+    const classList = ["Class 7A", "Class 8B"];
+    const staffList = ["Mr. Kumar", "Ms. Priya"];
+    let loggedIn = false;
+
+    function login() {
+      const u = document.getElementById('username').value;
+      const p = document.getElementById('password').value;
+      if ((u === 'Principal' && p === 'admin123') || (u === 'committee' && p === 'committee123')) {
+        loggedIn = true;
+        document.getElementById('editControls').classList.remove('hidden');
+        document.getElementById('addRemoveSection').classList.remove('hidden');
+        alert("Logged in successfully!");
+      } else {
+        alert("Incorrect username or password");
+      }
+    }
+
+    function selectType(type) {
+      const container = document.getElementById('dropdownContainer');
+      container.innerHTML = '';
+      const label = document.createElement('label');
+      label.textContent = `Select ${type === 'class' ? 'Class' : 'Staff'}:`;
+      const dropdown = document.createElement('select');
+      dropdown.id = 'selectedItem';
+
+      const list = type === 'class' ? classList : staffList;
+      list.forEach(name => {
+        const option = document.createElement('option');
+        option.value = name;
+        option.textContent = name;
+        dropdown.appendChild(option);
+      });
+
+      const button = document.createElement('button');
+      button.textContent = "Show Timetable";
+      button.onclick = () => renderTimetable(dropdown.value);
+
+      container.appendChild(label);
+      container.appendChild(dropdown);
+      container.appendChild(button);
+    }
+
+    function renderTimetable(name, editable = false) {
+      if (!timetable[name]) {
+        timetable[name] = days.map(() => hours.map(() => "-"));
+      }
+      const data = timetable[name];
+      const container = document.getElementById('timetableContainer');
+      let html = `<h2>${name} Timetable</h2><table><tr><th>Day / Time</th>`;
+      hours.forEach(hour => html += `<th>${hour}</th>`);
+      html += '</tr>';
+      data.forEach((row, i) => {
+        html += `<tr><th>${days[i]}</th>`;
+        row.forEach((cell, j) => {
+          if (editable) {
+            html += `<td><input type='text' value='${cell}' data-day='${i}' data-hour='${j}' /></td>`;
+          } else {
+            html += `<td>${cell}</td>`;
+          }
+        });
+        html += '</tr>';
+      });
+      html += '</table>';
+      if (editable) html += `<button onclick="saveTimetable('${name}')">Save</button>`;
+      container.innerHTML = html;
+    }
+
+    function startEdit() {
+      const container = document.getElementById('dropdownContainer');
+      container.innerHTML = '<button onclick="chooseEditType()">Select Class or Staff to Edit</button>';
+    }
+
+    function chooseEditType() {
+      const container = document.getElementById('dropdownContainer');
+      container.innerHTML = `
+        <button onclick="showEditDropdown('class')">Class</button>
+        <button onclick="showEditDropdown('staff')">Staff</button>
+      `;
+    }
+
+    function showEditDropdown(type) {
+      const container = document.getElementById('dropdownContainer');
+      const list = type === 'class' ? classList : staffList;
+      let html = `Select ${type}: <select id='editSelect'>`;
+      list.forEach(name => html += `<option value='${name}'>${name}</option>`);
+      html += `</select><button onclick="editTimetable('${type}')">Edit</button>`;
+      container.innerHTML = html;
+    }
+
+    function editTimetable(type) {
+      const name = document.getElementById('editSelect').value;
+      renderTimetable(name, true);
+    }
+
+    function saveTimetable(name) {
+      const inputs = document.querySelectorAll('input[data-day]');
+      inputs.forEach(input => {
+        const day = parseInt(input.getAttribute('data-day'));
+        const hour = parseInt(input.getAttribute('data-hour'));
+        timetable[name][day][hour] = input.value;
+      });
+      alert('Timetable saved!');
+      renderTimetable(name);
+    }
+
+    function addClass() {
+      const newClass = document.getElementById('newClass').value.trim();
+      if (newClass && !classList.includes(newClass)) {
+        classList.push(newClass);
+        document.getElementById('newClass').value = '';
+        updateDropdowns();
+        alert('Class added!');
+      }
+    }
+
+    function removeClass() {
+      const selected = document.getElementById('removeClassSelect').value;
+      const index = classList.indexOf(selected);
+      if (index > -1) {
+        classList.splice(index, 1);
+        delete timetable[selected];
+        updateDropdowns();
+        alert('Class removed!');
+      }
+    }
+
+    function addStaff() {
+      const newStaff = document.getElementById('newStaff').value.trim();
+      if (newStaff && !staffList.includes(newStaff)) {
+        staffList.push(newStaff);
+        document.getElementById('newStaff').value = '';
+        updateDropdowns();
+        alert('Staff added!');
+      }
+    }
+
+    function removeStaff() {
+      const selected = document.getElementById('removeStaffSelect').value;
+      const index = staffList.indexOf(selected);
+      if (index > -1) {
+        staffList.splice(index, 1);
+        delete timetable[selected];
+        updateDropdowns();
+        alert('Staff removed!');
+      }
+    }
+
+    function updateDropdowns() {
+      const removeClassSelect = document.getElementById('removeClassSelect');
+      removeClassSelect.innerHTML = '';
+      classList.forEach(c => {
+        const option = document.createElement('option');
+        option.value = c;
+        option.textContent = c;
+        removeClassSelect.appendChild(option);
+      });
+      const removeStaffSelect = document.getElementById('removeStaffSelect');
+      removeStaffSelect.innerHTML = '';
+      staffList.forEach(s => {
+        const option = document.createElement('option');
+        option.value = s;
+        option.textContent = s;
+        removeStaffSelect.appendChild(option);
+      });
+    }
+  </script>
+</body>
+</html>
