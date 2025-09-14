@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EduSchedule - Professional Timetable Manager</title>
+  <title>KVSR Siddhartha College of Pharmaceutical Sciences - Timetable Manager</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -12,7 +12,7 @@
   <div id="app">
     <div class="loading-spinner">
       <div class="spinner"></div>
-      <p>Loading EduSchedule...</p>
+      <p>Loading KVSR Siddhartha College Timetable System...</p>
     </div>
   </div>
   
@@ -25,7 +25,7 @@
 
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, #2d5016 0%, #4a7c59 50%, #68a085 100%);
       min-height: 100vh;
       color: #333;
     }
@@ -70,18 +70,50 @@
       margin-bottom: 24px;
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
       text-align: center;
+      position: relative;
     }
 
     .header h1 {
-      font-size: 2.5rem;
+      font-size: 2.2rem;
       font-weight: 700;
-      color: #2d3748;
+      color: #2d5016;
       margin-bottom: 8px;
     }
 
     .header p {
-      color: #718096;
+      color: #4a7c59;
       font-size: 1.1rem;
+    }
+
+    .login-btn {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      background: linear-gradient(135deg, #2d5016 0%, #4a7c59 100%);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .login-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(45, 80, 22, 0.4);
+    }
+
+    .logout-btn {
+      background: #dc3545;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+      margin-left: 12px;
     }
 
     .main-content {
@@ -92,21 +124,37 @@
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     }
 
-    .login-section {
-      max-width: 400px;
-      margin: 0 auto;
-      text-align: center;
+    .login-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
     }
 
-    .login-section h2 {
+    .login-form {
+      background: white;
+      padding: 32px;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      max-width: 400px;
+      width: 90%;
+    }
+
+    .login-form h2 {
       margin-bottom: 24px;
-      color: #2d3748;
+      color: #2d5016;
       font-weight: 600;
+      text-align: center;
     }
 
     .form-group {
       margin-bottom: 16px;
-      text-align: left;
     }
 
     .form-group label {
@@ -127,11 +175,11 @@
 
     .form-group input:focus {
       outline: none;
-      border-color: #667eea;
+      border-color: #4a7c59;
     }
 
     .btn {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, #2d5016 0%, #4a7c59 100%);
       color: white;
       border: none;
       padding: 12px 24px;
@@ -140,35 +188,44 @@
       font-weight: 500;
       cursor: pointer;
       transition: transform 0.2s, box-shadow 0.2s;
+      width: 100%;
     }
 
     .btn:hover {
       transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+      box-shadow: 0 4px 12px rgba(45, 80, 22, 0.4);
+    }
+
+    .btn-secondary {
+      background: #6c757d;
+      margin-top: 8px;
     }
 
     .tabs {
       display: flex;
       margin-bottom: 32px;
-      background: #f7fafc;
+      background: #f0f8f0;
       border-radius: 12px;
       padding: 4px;
+      flex-wrap: wrap;
     }
 
     .tab {
       flex: 1;
-      padding: 12px 24px;
+      padding: 12px 16px;
       background: transparent;
       border: none;
       border-radius: 8px;
       font-weight: 500;
       cursor: pointer;
       transition: all 0.2s;
+      min-width: 120px;
+      margin: 2px;
     }
 
     .tab.active {
       background: white;
-      color: #667eea;
+      color: #2d5016;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
 
@@ -178,6 +235,33 @@
 
     .tab-content.active {
       display: block;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .section-header h3 {
+      color: #2d5016;
+      font-size: 1.5rem;
+    }
+
+    .selector-group {
+      display: flex;
+      gap: 16px;
+      margin: 24px 0;
+      flex-wrap: wrap;
+    }
+
+    .selector-group select {
+      padding: 10px 16px;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 16px;
+      min-width: 150px;
     }
 
     .timetable-grid {
@@ -192,27 +276,132 @@
       border-radius: 12px;
       overflow: hidden;
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+      min-width: 800px;
     }
 
     .timetable th,
     .timetable td {
-      padding: 16px;
+      padding: 16px 12px;
       text-align: center;
       border-bottom: 1px solid #e2e8f0;
     }
 
     .timetable th {
-      background: #f7fafc;
+      background: #f0f8f0;
       font-weight: 600;
-      color: #2d3748;
+      color: #2d5016;
+      position: sticky;
+      top: 0;
     }
 
     .timetable td {
       background: white;
+      min-width: 120px;
     }
 
     .timetable tr:hover td {
-      background: #f7fafc;
+      background: #f8fdf8;
+    }
+
+    .timetable input {
+      width: 100%;
+      border: 1px solid #e2e8f0;
+      padding: 6px 8px;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    .timetable input:focus {
+      outline: none;
+      border-color: #4a7c59;
+    }
+
+    .management-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-top: 24px;
+    }
+
+    .management-section {
+      background: #f8fdf8;
+      padding: 24px;
+      border-radius: 12px;
+      border: 2px solid #e8f5e8;
+    }
+
+    .management-section h4 {
+      color: #2d5016;
+      margin-bottom: 16px;
+      font-size: 1.2rem;
+    }
+
+    .item-list {
+      margin-top: 16px;
+    }
+
+    .item-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px;
+      background: white;
+      margin: 8px 0;
+      border-radius: 8px;
+      border: 1px solid #e8f5e8;
+    }
+
+    .remove-btn {
+      background: #dc3545;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .free-teachers {
+      background: #e8f5e8;
+      padding: 16px;
+      border-radius: 8px;
+      margin-top: 16px;
+    }
+
+    .free-teachers h4 {
+      color: #2d5016;
+      margin-bottom: 12px;
+    }
+
+    .teacher-chip {
+      display: inline-block;
+      background: #4a7c59;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 16px;
+      margin: 4px;
+      font-size: 14px;
+    }
+
+    .substitution-form {
+      background: #f8fdf8;
+      padding: 20px;
+      border-radius: 12px;
+      margin-top: 20px;
+      border: 2px solid #e8f5e8;
+    }
+
+    .substitution-form h4 {
+      color: #2d5016;
+      margin-bottom: 16px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr auto;
+      gap: 12px;
+      align-items: end;
+      margin-bottom: 12px;
     }
 
     .notification {
@@ -233,11 +422,11 @@
     }
 
     .notification.success {
-      background: #48bb78;
+      background: #28a745;
     }
 
     .notification.error {
-      background: #f56565;
+      background: #dc3545;
     }
 
     .hidden {
@@ -250,26 +439,47 @@
       }
       
       .header h1 {
-        font-size: 2rem;
+        font-size: 1.8rem;
       }
       
       .main-content {
         padding: 24px;
       }
+
+      .login-btn {
+        position: static;
+        margin-top: 16px;
+      }
+
+      .management-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .tabs {
+        flex-direction: column;
+      }
+
+      .tab {
+        flex: none;
+      }
     }
   </style>
 
   <script type="module">
-    // Simple timetable manager without external dependencies
     class TimetableManager {
       constructor() {
         this.currentUser = null;
-        this.currentTab = 'view';
-        this.classes = ['Class 7A', 'Class 8B', 'Class 9C'];
-        this.staff = ['Mr. Kumar', 'Ms. Priya', 'Dr. Singh'];
+        this.currentTab = 'view-class';
+        this.classes = ['B.Pharm I Year', 'B.Pharm II Year', 'B.Pharm III Year', 'B.Pharm IV Year', 'Pharm.D I Year', 'Pharm.D II Year'];
+        this.staff = ['Dr. Ramesh Kumar', 'Dr. Priya Sharma', 'Prof. Suresh Singh', 'Dr. Anita Reddy', 'Prof. Vijay Kumar', 'Dr. Lakshmi Devi'];
         this.timetables = {};
+        this.substitutions = [];
         this.days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-        this.timeSlots = ['9:30-10:30', '10:30-11:30', '11:30-12:30', '12:30-1:30', 'Lunch', '2:00-3:00', '3:00-4:00', '4:00-5:00'];
+        this.timeSlots = ['9:00-10:00', '10:00-11:00', '11:00-12:00', '12:00-1:00', 'Lunch Break', '2:00-3:00', '3:00-4:00', '4:00-5:00'];
         
         this.init();
       }
@@ -278,83 +488,114 @@
         this.loadData();
         this.render();
         this.setupEventListeners();
+        this.initializeSampleData();
+      }
+
+      initializeSampleData() {
+        // Initialize sample timetables if none exist
+        if (Object.keys(this.timetables).length === 0) {
+          this.classes.forEach(cls => {
+            this.timetables[cls] = this.days.map(() => this.timeSlots.map(() => '-'));
+          });
+          this.staff.forEach(staff => {
+            this.timetables[staff] = this.days.map(() => this.timeSlots.map(() => 'Free'));
+          });
+          
+          // Add some sample data
+          this.timetables['B.Pharm I Year'][0][0] = 'Pharmaceutics - Dr. Ramesh Kumar';
+          this.timetables['B.Pharm I Year'][0][1] = 'Pharmaceutical Chemistry - Dr. Priya Sharma';
+          this.timetables['Dr. Ramesh Kumar'][0][0] = 'B.Pharm I Year - Pharmaceutics';
+          this.timetables['Dr. Priya Sharma'][0][1] = 'B.Pharm I Year - Pharmaceutical Chemistry';
+          
+          this.saveData();
+        }
       }
 
       loadData() {
-        const saved = localStorage.getItem('eduScheduleData');
+        const saved = localStorage.getItem('kvsrTimetableData');
         if (saved) {
           const data = JSON.parse(saved);
           this.classes = data.classes || this.classes;
           this.staff = data.staff || this.staff;
           this.timetables = data.timetables || {};
+          this.substitutions = data.substitutions || [];
         }
       }
 
       saveData() {
-        localStorage.setItem('eduScheduleData', JSON.stringify({
+        localStorage.setItem('kvsrTimetableData', JSON.stringify({
           classes: this.classes,
           staff: this.staff,
-          timetables: this.timetables
+          timetables: this.timetables,
+          substitutions: this.substitutions
         }));
       }
 
       render() {
         const app = document.getElementById('app');
-        
-        if (!this.currentUser) {
-          app.innerHTML = this.renderLogin();
-        } else {
-          app.innerHTML = this.renderMainApp();
-          this.renderTabContent();
-        }
-      }
-
-      renderLogin() {
-        return `
-          <div class="app-container">
-            <div class="header">
-              <h1>🎓 KVSR Siddhartha College of Pharmaceutical Sciences</h1>
-              <p>Professional Timetable Management System</p>
-            </div>
-            <div class="main-content">
-              <div class="login-section">
-                <h2>Login Required</h2>
-                <div class="form-group">
-                  <label for="username">Username</label>
-                  <input type="text" id="username" placeholder="Enter username">
-                </div>
-                <div class="form-group">
-                  <label for="password">Password</label>
-                  <input type="password" id="password" placeholder="Enter password">
-                </div>
-                <button class="btn" onclick="app.login()">Login</button>
-              </div>
-            </div>
-          </div>
-        `;
+        app.innerHTML = this.renderMainApp();
+        this.renderTabContent();
       }
 
       renderMainApp() {
         return `
           <div class="app-container">
             <div class="header">
-              <h1>🎓 EduSchedule</h1>
-              <p>Welcome, ${this.currentUser}! Professional Timetable Management</p>
-              <button class="btn" onclick="app.logout()" style="margin-top: 16px;">Logout</button>
+              <h1>🎓 KVSR Siddhartha College of Pharmaceutical Sciences</h1>
+              <p>Professional Timetable Management System</p>
+              ${!this.currentUser ? 
+                '<button class="login-btn" onclick="app.showLogin()">Admin Login</button>' :
+                `<div style="position: absolute; top: 24px; right: 24px;">
+                  <span style="color: #2d5016; font-weight: 500;">Welcome, ${this.currentUser}</span>
+                  <button class="logout-btn" onclick="app.logout()">Logout</button>
+                </div>`
+              }
             </div>
             <div class="main-content">
               <div class="tabs">
-                <button class="tab ${this.currentTab === 'view' ? 'active' : ''}" onclick="app.switchTab('view')">
-                  📅 View Timetables
+                <button class="tab ${this.currentTab === 'view-class' ? 'active' : ''}" onclick="app.switchTab('view-class')">
+                  📚 View Class Timetables
                 </button>
-                <button class="tab ${this.currentTab === 'edit' ? 'active' : ''}" onclick="app.switchTab('edit')">
-                  ✏️ Edit Timetables
+                <button class="tab ${this.currentTab === 'view-staff' ? 'active' : ''}" onclick="app.switchTab('view-staff')">
+                  👨‍🏫 View Staff Timetables
                 </button>
-                <button class="tab ${this.currentTab === 'manage' ? 'active' : ''}" onclick="app.switchTab('manage')">
-                  ⚙️ Manage Classes & Staff
-                </button>
+                ${this.currentUser ? `
+                  <button class="tab ${this.currentTab === 'edit' ? 'active' : ''}" onclick="app.switchTab('edit')">
+                    ✏️ Edit Timetables
+                  </button>
+                  <button class="tab ${this.currentTab === 'substitution' ? 'active' : ''}" onclick="app.switchTab('substitution')">
+                    🔄 Substitutions
+                  </button>
+                  <button class="tab ${this.currentTab === 'free-staff' ? 'active' : ''}" onclick="app.switchTab('free-staff')">
+                    ⏰ Free Staff
+                  </button>
+                  <button class="tab ${this.currentTab === 'manage' ? 'active' : ''}" onclick="app.switchTab('manage')">
+                    ⚙️ Manage
+                  </button>
+                ` : ''}
               </div>
               <div id="tab-content"></div>
+            </div>
+          </div>
+          ${this.showLoginModal ? this.renderLoginModal() : ''}
+        `;
+      }
+
+      renderLoginModal() {
+        return `
+          <div class="login-modal">
+            <div class="login-form">
+              <h2>Admin Login</h2>
+              <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" placeholder="Enter username">
+              </div>
+              <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Enter password">
+              </div>
+              <button class="btn" onclick="app.login()">Login</button>
+              <button class="btn btn-secondary" onclick="app.hideLogin()">Cancel</button>
             </div>
           </div>
         `;
@@ -364,11 +605,20 @@
         const content = document.getElementById('tab-content');
         
         switch(this.currentTab) {
-          case 'view':
-            content.innerHTML = this.renderViewTab();
+          case 'view-class':
+            content.innerHTML = this.renderViewClassTab();
+            break;
+          case 'view-staff':
+            content.innerHTML = this.renderViewStaffTab();
             break;
           case 'edit':
             content.innerHTML = this.renderEditTab();
+            break;
+          case 'substitution':
+            content.innerHTML = this.renderSubstitutionTab();
+            break;
+          case 'free-staff':
+            content.innerHTML = this.renderFreeStaffTab();
             break;
           case 'manage':
             content.innerHTML = this.renderManageTab();
@@ -376,19 +626,39 @@
         }
       }
 
-      renderViewTab() {
+      renderViewClassTab() {
         return `
           <div class="tab-content active">
-            <h3>View Timetables</h3>
-            <div style="margin: 24px 0;">
-              <button class="btn" onclick="app.showTimetableSelector('class')" style="margin-right: 16px;">
-                View by Class
-              </button>
-              <button class="btn" onclick="app.showTimetableSelector('staff')">
-                View by Staff
+            <div class="section-header">
+              <h3>Class Timetables</h3>
+            </div>
+            <div class="selector-group">
+              <select id="class-select">
+                ${this.classes.map(cls => `<option value="${cls}">${cls}</option>`).join('')}
+              </select>
+              <button class="btn" onclick="app.viewTimetable('class')" style="width: auto;">
+                Show Timetable
               </button>
             </div>
-            <div id="timetable-selector"></div>
+            <div id="timetable-display"></div>
+          </div>
+        `;
+      }
+
+      renderViewStaffTab() {
+        return `
+          <div class="tab-content active">
+            <div class="section-header">
+              <h3>Staff Timetables</h3>
+            </div>
+            <div class="selector-group">
+              <select id="staff-select">
+                ${this.staff.map(staff => `<option value="${staff}">${staff}</option>`).join('')}
+              </select>
+              <button class="btn" onclick="app.viewTimetable('staff')" style="width: auto;">
+                Show Timetable
+              </button>
+            </div>
             <div id="timetable-display"></div>
           </div>
         `;
@@ -397,17 +667,90 @@
       renderEditTab() {
         return `
           <div class="tab-content active">
-            <h3>Edit Timetables</h3>
-            <div style="margin: 24px 0;">
-              <button class="btn" onclick="app.showEditSelector('class')" style="margin-right: 16px;">
-                Edit Class Timetable
-              </button>
-              <button class="btn" onclick="app.showEditSelector('staff')">
-                Edit Staff Timetable
+            <div class="section-header">
+              <h3>Edit Timetables</h3>
+            </div>
+            <div class="selector-group">
+              <select id="edit-type">
+                <option value="class">Class</option>
+                <option value="staff">Staff</option>
+              </select>
+              <select id="edit-select">
+                ${this.classes.map(cls => `<option value="${cls}">${cls}</option>`).join('')}
+              </select>
+              <button class="btn" onclick="app.editTimetable()" style="width: auto;">
+                Edit Timetable
               </button>
             </div>
-            <div id="edit-selector"></div>
             <div id="edit-display"></div>
+          </div>
+        `;
+      }
+
+      renderSubstitutionTab() {
+        return `
+          <div class="tab-content active">
+            <div class="section-header">
+              <h3>Teacher Substitutions</h3>
+            </div>
+            <div class="substitution-form">
+              <h4>Assign Substitution</h4>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Absent Teacher</label>
+                  <select id="absent-teacher">
+                    ${this.staff.map(staff => `<option value="${staff}">${staff}</option>`).join('')}
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Day</label>
+                  <select id="sub-day">
+                    ${this.days.map((day, i) => `<option value="${i}">${day}</option>`).join('')}
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Time Slot</label>
+                  <select id="sub-slot">
+                    ${this.timeSlots.map((slot, i) => `<option value="${i}">${slot}</option>`).join('')}
+                  </select>
+                </div>
+                <button class="btn" onclick="app.findSubstitute()" style="width: auto;">
+                  Find Substitute
+                </button>
+              </div>
+              <div id="substitute-options"></div>
+            </div>
+            <div id="substitution-list">
+              <h4>Active Substitutions</h4>
+              ${this.substitutions.map((sub, i) => `
+                <div class="item-row">
+                  <span>${sub.absentTeacher} → ${sub.substituteTeacher} (${this.days[sub.day]}, ${this.timeSlots[sub.slot]})</span>
+                  <button class="remove-btn" onclick="app.removeSubstitution(${i})">Remove</button>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }
+
+      renderFreeStaffTab() {
+        return `
+          <div class="tab-content active">
+            <div class="section-header">
+              <h3>Free Staff Schedule</h3>
+            </div>
+            <div class="selector-group">
+              <select id="free-day">
+                ${this.days.map((day, i) => `<option value="${i}">${day}</option>`).join('')}
+              </select>
+              <select id="free-slot">
+                ${this.timeSlots.map((slot, i) => `<option value="${i}">${slot}</option>`).join('')}
+              </select>
+              <button class="btn" onclick="app.showFreeStaff()" style="width: auto;">
+                Show Free Staff
+              </button>
+            </div>
+            <div id="free-staff-display"></div>
           </div>
         `;
       }
@@ -415,34 +758,36 @@
       renderManageTab() {
         return `
           <div class="tab-content active">
-            <h3>Manage Classes & Staff</h3>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 24px;">
-              <div>
+            <div class="section-header">
+              <h3>Manage Classes & Staff</h3>
+            </div>
+            <div class="management-grid">
+              <div class="management-section">
                 <h4>Classes</h4>
                 <div class="form-group">
                   <input type="text" id="new-class" placeholder="New class name">
                   <button class="btn" onclick="app.addClass()" style="margin-top: 8px;">Add Class</button>
                 </div>
-                <div style="margin-top: 16px;">
+                <div class="item-list">
                   ${this.classes.map(cls => `
-                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px; background: #f7fafc; margin: 4px 0; border-radius: 4px;">
+                    <div class="item-row">
                       <span>${cls}</span>
-                      <button onclick="app.removeClass('${cls}')" style="background: #f56565; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer;">Remove</button>
+                      <button class="remove-btn" onclick="app.removeClass('${cls}')">Remove</button>
                     </div>
                   `).join('')}
                 </div>
               </div>
-              <div>
+              <div class="management-section">
                 <h4>Staff</h4>
                 <div class="form-group">
                   <input type="text" id="new-staff" placeholder="New staff name">
                   <button class="btn" onclick="app.addStaff()" style="margin-top: 8px;">Add Staff</button>
                 </div>
-                <div style="margin-top: 16px;">
+                <div class="item-list">
                   ${this.staff.map(staff => `
-                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px; background: #f7fafc; margin: 4px 0; border-radius: 4px;">
+                    <div class="item-row">
                       <span>${staff}</span>
-                      <button onclick="app.removeStaff('${staff}')" style="background: #f56565; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer;">Remove</button>
+                      <button class="remove-btn" onclick="app.removeStaff('${staff}')">Remove</button>
                     </div>
                   `).join('')}
                 </div>
@@ -453,12 +798,31 @@
       }
 
       setupEventListeners() {
-        // Handle Enter key in login form
         document.addEventListener('keypress', (e) => {
-          if (e.key === 'Enter' && !this.currentUser) {
+          if (e.key === 'Enter' && this.showLoginModal) {
             this.login();
           }
         });
+
+        // Update edit select when type changes
+        document.addEventListener('change', (e) => {
+          if (e.target.id === 'edit-type') {
+            const select = document.getElementById('edit-select');
+            const type = e.target.value;
+            const items = type === 'class' ? this.classes : this.staff;
+            select.innerHTML = items.map(item => `<option value="${item}">${item}</option>`).join('');
+          }
+        });
+      }
+
+      showLogin() {
+        this.showLoginModal = true;
+        this.render();
+      }
+
+      hideLogin() {
+        this.showLoginModal = false;
+        this.render();
       }
 
       login() {
@@ -468,6 +832,7 @@
         if ((username === 'Principal' && password === 'admin123') || 
             (username === 'committee' && password === 'committee123')) {
           this.currentUser = username;
+          this.showLoginModal = false;
           this.showNotification('Login successful!', 'success');
           this.render();
         } else {
@@ -477,7 +842,7 @@
 
       logout() {
         this.currentUser = null;
-        this.currentTab = 'view';
+        this.currentTab = 'view-class';
         this.render();
       }
 
@@ -486,49 +851,16 @@
         this.render();
       }
 
-      showTimetableSelector(type) {
-        const selector = document.getElementById('timetable-selector');
-        const items = type === 'class' ? this.classes : this.staff;
-        
-        selector.innerHTML = `
-          <div style="margin: 16px 0;">
-            <label>Select ${type === 'class' ? 'Class' : 'Staff'}:</label>
-            <select id="view-select" style="margin-left: 8px; padding: 8px;">
-              ${items.map(item => `<option value="${item}">${item}</option>`).join('')}
-            </select>
-            <button class="btn" onclick="app.viewTimetable('${type}')" style="margin-left: 8px;">
-              Show Timetable
-            </button>
-          </div>
-        `;
-      }
-
-      showEditSelector(type) {
-        const selector = document.getElementById('edit-selector');
-        const items = type === 'class' ? this.classes : this.staff;
-        
-        selector.innerHTML = `
-          <div style="margin: 16px 0;">
-            <label>Select ${type === 'class' ? 'Class' : 'Staff'}:</label>
-            <select id="edit-select" style="margin-left: 8px; padding: 8px;">
-              ${items.map(item => `<option value="${item}">${item}</option>`).join('')}
-            </select>
-            <button class="btn" onclick="app.editTimetable('${type}')" style="margin-left: 8px;">
-              Edit Timetable
-            </button>
-          </div>
-        `;
-      }
-
       viewTimetable(type) {
-        const select = document.getElementById('view-select');
+        const select = document.getElementById(`${type}-select`);
         const name = select.value;
         this.displayTimetable(name, false);
       }
 
-      editTimetable(type) {
-        const select = document.getElementById('edit-select');
-        const name = select.value;
+      editTimetable() {
+        const typeSelect = document.getElementById('edit-type');
+        const itemSelect = document.getElementById('edit-select');
+        const name = itemSelect.value;
         this.displayTimetable(name, true);
       }
 
@@ -559,7 +891,7 @@
                         ${editable ? 
                           `<input type="text" value="${cell}" 
                            onchange="app.updateCell('${name}', ${dayIndex}, ${slotIndex}, this.value)"
-                           style="width: 100%; border: 1px solid #e2e8f0; padding: 4px; border-radius: 4px;">` 
+                           placeholder="Subject/Teacher">` 
                           : cell}
                       </td>
                     `).join('')}
@@ -567,7 +899,7 @@
                 `).join('')}
               </tbody>
             </table>
-            ${editable ? `<button class="btn" onclick="app.saveTimetable('${name}')" style="margin-top: 16px;">Save Changes</button>` : ''}
+            ${editable ? `<button class="btn" onclick="app.saveTimetable('${name}')" style="margin-top: 16px; width: auto;">Save Changes</button>` : ''}
           </div>
         `;
         
@@ -586,12 +918,88 @@
         this.showNotification('Timetable saved successfully!', 'success');
       }
 
+      findSubstitute() {
+        const absentTeacher = document.getElementById('absent-teacher').value;
+        const day = parseInt(document.getElementById('sub-day').value);
+        const slot = parseInt(document.getElementById('sub-slot').value);
+
+        const freeTeachers = this.staff.filter(teacher => {
+          if (teacher === absentTeacher) return false;
+          const schedule = this.timetables[teacher];
+          if (!schedule) return true;
+          return schedule[day][slot] === 'Free' || schedule[day][slot] === '-';
+        });
+
+        const container = document.getElementById('substitute-options');
+        if (freeTeachers.length > 0) {
+          container.innerHTML = `
+            <h4>Available Substitutes:</h4>
+            <div class="selector-group">
+              <select id="substitute-teacher">
+                ${freeTeachers.map(teacher => `<option value="${teacher}">${teacher}</option>`).join('')}
+              </select>
+              <button class="btn" onclick="app.assignSubstitute()" style="width: auto;">Assign Substitute</button>
+            </div>
+          `;
+        } else {
+          container.innerHTML = '<p style="color: #dc3545;">No teachers available for substitution at this time.</p>';
+        }
+      }
+
+      assignSubstitute() {
+        const absentTeacher = document.getElementById('absent-teacher').value;
+        const substituteTeacher = document.getElementById('substitute-teacher').value;
+        const day = parseInt(document.getElementById('sub-day').value);
+        const slot = parseInt(document.getElementById('sub-slot').value);
+
+        this.substitutions.push({
+          absentTeacher,
+          substituteTeacher,
+          day,
+          slot,
+          date: new Date().toLocaleDateString()
+        });
+
+        this.saveData();
+        this.showNotification('Substitute assigned successfully!', 'success');
+        this.renderTabContent();
+      }
+
+      removeSubstitution(index) {
+        this.substitutions.splice(index, 1);
+        this.saveData();
+        this.renderTabContent();
+      }
+
+      showFreeStaff() {
+        const day = parseInt(document.getElementById('free-day').value);
+        const slot = parseInt(document.getElementById('free-slot').value);
+
+        const freeTeachers = this.staff.filter(teacher => {
+          const schedule = this.timetables[teacher];
+          if (!schedule) return true;
+          return schedule[day][slot] === 'Free' || schedule[day][slot] === '-';
+        });
+
+        const container = document.getElementById('free-staff-display');
+        container.innerHTML = `
+          <div class="free-teachers">
+            <h4>Free Staff on ${this.days[day]} at ${this.timeSlots[slot]}:</h4>
+            ${freeTeachers.length > 0 ? 
+              freeTeachers.map(teacher => `<span class="teacher-chip">${teacher}</span>`).join('') :
+              '<p>No staff members are free at this time.</p>'
+            }
+          </div>
+        `;
+      }
+
       addClass() {
         const input = document.getElementById('new-class');
         const name = input.value.trim();
         
         if (name && !this.classes.includes(name)) {
           this.classes.push(name);
+          this.timetables[name] = this.days.map(() => this.timeSlots.map(() => '-'));
           input.value = '';
           this.saveData();
           this.renderTabContent();
@@ -613,6 +1021,7 @@
         
         if (name && !this.staff.includes(name)) {
           this.staff.push(name);
+          this.timetables[name] = this.days.map(() => this.timeSlots.map(() => 'Free'));
           input.value = '';
           this.saveData();
           this.renderTabContent();
