@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KVSR Siddhartha College of Pharmaceutical Sciences - Timetable Manager</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script type="module" crossorigin src="/assets/index-CgAR18_k.js"></script>
+</head>
+<body>
+  <div id="app">
+    <div class="loading-spinner">
+      <div class="spinner"></div>
+      <p>Loading KVSR Siddhartha College Timetable System...</p>
+    </div>
+  </div>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #44bd64 0%, #ffffff 50%, #44bd64 100%);
+      min-height: 100vh;
+      color: #333;
+    }
+
+    .loading-spinner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      color: white;
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid rgba(255, 255, 255, 0.3);
+      border-top: 4px solid white;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 16px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Main App Styles */
+    .app-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      min-height: 100vh;
+    }
+
+    .header {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      position: relative;
+    }
+
+    .header h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #2d5016;
+      margin-bottom: 8px;
+    }
+
+    .header p {
+      color: #2d5016;
+      font-size: 1.1rem;
+    }
+
+    .login-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: #44bd64;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .login-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(68, 189, 100, 0.5);
+      background: #3da856;
+    }
+
+    .logout-btn {
+      background: #dc3545;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+      margin-left: 12px;
+    }
+
+    .main-content {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+
+    .login-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .login-form {
+      background: white;
+      padding: 32px;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      max-width: 400px;
+      width: 90%;
+    }
+
+    .login-form h2 {
+      margin-bottom: 24px;
+      color: #2d5016;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: #4a5568;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: border-color 0.2s;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: #44bd64;
+    }
+
+    .btn {
+      background: #44bd64;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      width: 100%;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(68, 189, 100, 0.5);
+      background: #3da856;
+    }
+
+    .btn-secondary {
+      background: #6c757d;
+      margin-top: 8px;
+    }
+
+    .tabs {
+      display: flex;
+      margin-bottom: 32px;
+      background: #f0f8f0;
+      border-radius: 12px;
+      padding: 4px;
+      flex-wrap: wrap;
+    }
+
+    .tab {
+      flex: 1;
+      padding: 12px 16px;
+      background: transparent;
+      border: none;
+      border-radius: 8px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      min-width: 120px;
+      margin: 2px;
+    }
+
+    .tab.active {
+      background: white;
+      color: #2d5016;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .section-header h3 {
+      color: #2d5016;
+      font-size: 1.5rem;
+    }
+
+    .selector-group {
+      display: flex;
+      gap: 16px;
+      margin: 24px 0;
+      flex-wrap: wrap;
+    }
+
+    .selector-group select {
+      padding: 10px 16px;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 16px;
+      min-width: 150px;
+    }
+
+    .timetable-grid {
+      overflow-x: auto;
+      margin-top: 24px;
+    }
+
+    .timetable {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+      min-width: 800px;
+    }
+
+    .timetable th,
+    .timetable td {
+      padding: 16px 12px;
+      text-align: center;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .timetable th {
+      background: #f0f8f0;
+      font-weight: 600;
+      color: #2d5016;
+      position: sticky;
+      top: 0;
+    }
+
+    .timetable td {
+      background: white;
+      min-width: 120px;
+    }
+
+    .timetable tr:hover td {
+      background: #f8fdf8;
+    }
+
+    .timetable input {
+      width: 100%;
+      border: 1px solid #e2e8f0;
+      padding: 6px 8px;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    .timetable input:focus {
+      outline: none;
+      border-color: #44bd64;
+    }
+
+    .management-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-top: 24px;
+    }
+
+    .management-section {
+      background: #f8fdf8;
+      padding: 24px;
+      border-radius: 12px;
+      border: 2px solid #e8f5e8;
+    }
+
+    .management-section h4 {
+      color: #2d5016;
+      margin-bottom: 16px;
+      font-size: 1.2rem;
+    }
+
+    .item-list {
+      margin-top: 16px;
+    }
+
+    .item-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px;
+      background: white;
+      margin: 8px 0;
+      border-radius: 8px;
+      border: 1px solid #e8f5e8;
+    }
+
+    .remove-btn {
+      background: #dc3545;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .free-teachers {
+      background: #e8f5e8;
+      padding: 16px;
+      border-radius: 8px;
+      margin-top: 16px;
+    }
+
+    .free-teachers h4 {
+      color: #2d5016;
+      margin-bottom: 12px;
+    }
+
+    .teacher-chip {
+      display: inline-block;
+      background: #44bd64;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 16px;
+      margin: 4px;
+      font-size: 14px;
+    }
+
+    .substitution-form {
+      background: #f8fdf8;
+      padding: 20px;
+      border-radius: 12px;
+      margin-top: 20px;
+      border: 2px solid #e8f5e8;
+    }
+
+    .substitution-form h4 {
+      color: #2d5016;
+      margin-bottom: 16px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr auto;
+      gap: 12px;
+      align-items: end;
+      margin-bottom: 12px;
+    }
+
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 16px 24px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 500;
+      z-index: 1000;
+      transform: translateX(400px);
+      transition: transform 0.3s;
+    }
+
+    .notification.show {
+      transform: translateX(0);
+    }
+
+    .notification.success {
+      background: #28a745;
+    }
+
+    .notification.error {
+      background: #dc3545;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    @media (max-width: 768px) {
+      .app-container {
+        padding: 16px;
+      }
+      
+      .header h1 {
+        font-size: 1.8rem;
+      }
+      
+      .main-content {
+        padding: 24px;
+      }
+
+      .login-btn {
+        position: static;
+        margin-top: 16px;
+      }
+
+      .management-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .tabs {
+        flex-direction: column;
+      }
+
+      .tab {
+        flex: none;
+      }
+    }
+  </style>
+
+</body>
+</html>
