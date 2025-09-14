@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EduSchedule - Professional Timetable Manager</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="app">
+    <div class="loading-spinner">
+      <div class="spinner"></div>
+      <p>Loading EduSchedule...</p>
+    </div>
+  </div>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      color: #333;
+    }
+
+    .loading-spinner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      color: white;
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid rgba(255, 255, 255, 0.3);
+      border-top: 4px solid white;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 16px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Main App Styles */
+    .app-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      min-height: 100vh;
+    }
+
+    .header {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #2d3748;
+      margin-bottom: 8px;
+    }
+
+    .header p {
+      color: #718096;
+      font-size: 1.1rem;
+    }
+
+    .main-content {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+
+    .login-section {
+      max-width: 400px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .login-section h2 {
+      margin-bottom: 24px;
+      color: #2d3748;
+      font-weight: 600;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+      text-align: left;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: #4a5568;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: border-color 0.2s;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    .btn {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+
+    .tabs {
+      display: flex;
+      margin-bottom: 32px;
+      background: #f7fafc;
+      border-radius: 12px;
+      padding: 4px;
+    }
+
+    .tab {
+      flex: 1;
+      padding: 12px 24px;
+      background: transparent;
+      border: none;
+      border-radius: 8px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tab.active {
+      background: white;
+      color: #667eea;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .timetable-grid {
+      overflow-x: auto;
+      margin-top: 24px;
+    }
+
+    .timetable {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    .timetable th,
+    .timetable td {
+      padding: 16px;
+      text-align: center;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .timetable th {
+      background: #f7fafc;
+      font-weight: 600;
+      color: #2d3748;
+    }
+
+    .timetable td {
+      background: white;
+    }
+
+    .timetable tr:hover td {
+      background: #f7fafc;
+    }
+
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 16px 24px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 500;
+      z-index: 1000;
+      transform: translateX(400px);
+      transition: transform 0.3s;
+    }
+
+    .notification.show {
+      transform: translateX(0);
+    }
+
+    .notification.success {
+      background: #48bb78;
+    }
+
+    .notification.error {
+      background: #f56565;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    @media (max-width: 768px) {
+      .app-container {
+        padding: 16px;
+      }
+      
+      .header h1 {
+        font-size: 2rem;
+      }
+      
+      .main-content {
+        padding: 24px;
+      }
+    }
+  </style>
+
+  <script type="module">
+    // Simple timetable manager without external dependencies
+    class TimetableManager {
+      constructor() {
+        this.currentUser = null;
+        this.currentTab = 'view';
+        this.classes = ['Class 7A', 'Class 8B', 'Class 9C'];
+        this.staff = ['Mr. Kumar', 'Ms. Priya', 'Dr. Singh'];
+        this.timetables = {};
+        this.days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        this.timeSlots = ['9:30-10:30', '10:30-11:30', '11:30-12:30', '12:30-1:30', 'Lunch', '2:00-3:00', '3:00-4:00', '4:00-5:00'];
+        
+        this.init();
+      }
+
+      init() {
+        this.loadData();
+        this.render();
+        this.setupEventListeners();
+      }
+
+      loadData() {
+        const saved = localStorage.getItem('eduScheduleData');
+        if (saved) {
+          const data = JSON.parse(saved);
+          this.classes = data.classes || this.classes;
+          this.staff = data.staff || this.staff;
+          this.timetables = data.timetables || {};
+        }
+      }
+
+      saveData() {
+        localStorage.setItem('eduScheduleData', JSON.stringify({
+          classes: this.classes,
+          staff: this.staff,
+          timetables: this.timetables
+        }));
+      }
+
+      render() {
+        const app = document.getElementById('app');
+        
+        if (!this.currentUser) {
+          app.innerHTML = this.renderLogin();
+        } else {
+          app.innerHTML = this.renderMainApp();
+          this.renderTabContent();
+        }
+      }
+
+      renderLogin() {
+        return `
+          <div class="app-container">
+            <div class="header">
+              <h1>🎓 EduSchedule</h1>
+              <p>Professional Timetable Management System</p>
+            </div>
+            <div class="main-content">
+              <div class="login-section">
+                <h2>Login Required</h2>
+                <div class="form-group">
+                  <label for="username">Username</label>
+                  <input type="text" id="username" placeholder="Enter username">
+                </div>
+                <div class="form-group">
+                  <label for="password">Password</label>
+                  <input type="password" id="password" placeholder="Enter password">
+                </div>
+                <button class="btn" onclick="app.login()">Login</button>
+                <div style="margin-top: 24px; padding: 16px; background: #f7fafc; border-radius: 8px; text-align: left;">
+                  <h4>Demo Credentials:</h4>
+                  <p><strong>Principal:</strong> Principal / admin123</p>
+                  <p><strong>Committee:</strong> committee / committee123</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      renderMainApp() {
+        return `
+          <div class="app-container">
+            <div class="header">
+              <h1>🎓 EduSchedule</h1>
+              <p>Welcome, ${this.currentUser}! Professional Timetable Management</p>
+              <button class="btn" onclick="app.logout()" style="margin-top: 16px;">Logout</button>
+            </div>
+            <div class="main-content">
+              <div class="tabs">
+                <button class="tab ${this.currentTab === 'view' ? 'active' : ''}" onclick="app.switchTab('view')">
+                  📅 View Timetables
+                </button>
+                <button class="tab ${this.currentTab === 'edit' ? 'active' : ''}" onclick="app.switchTab('edit')">
+                  ✏️ Edit Timetables
+                </button>
+                <button class="tab ${this.currentTab === 'manage' ? 'active' : ''}" onclick="app.switchTab('manage')">
+                  ⚙️ Manage Classes & Staff
+                </button>
+              </div>
+              <div id="tab-content"></div>
+            </div>
+          </div>
+        `;
+      }
+
+      renderTabContent() {
+        const content = document.getElementById('tab-content');
+        
+        switch(this.currentTab) {
+          case 'view':
+            content.innerHTML = this.renderViewTab();
+            break;
+          case 'edit':
+            content.innerHTML = this.renderEditTab();
+            break;
+          case 'manage':
+            content.innerHTML = this.renderManageTab();
+            break;
+        }
+      }
+
+      renderViewTab() {
+        return `
+          <div class="tab-content active">
+            <h3>View Timetables</h3>
+            <div style="margin: 24px 0;">
+              <button class="btn" onclick="app.showTimetableSelector('class')" style="margin-right: 16px;">
+                View by Class
+              </button>
+              <button class="btn" onclick="app.showTimetableSelector('staff')">
+                View by Staff
+              </button>
+            </div>
+            <div id="timetable-selector"></div>
+            <div id="timetable-display"></div>
+          </div>
+        `;
+      }
+
+      renderEditTab() {
+        return `
+          <div class="tab-content active">
+            <h3>Edit Timetables</h3>
+            <div style="margin: 24px 0;">
+              <button class="btn" onclick="app.showEditSelector('class')" style="margin-right: 16px;">
+                Edit Class Timetable
+              </button>
+              <button class="btn" onclick="app.showEditSelector('staff')">
+                Edit Staff Timetable
+              </button>
+            </div>
+            <div id="edit-selector"></div>
+            <div id="edit-display"></div>
+          </div>
+        `;
+      }
+
+      renderManageTab() {
+        return `
+          <div class="tab-content active">
+            <h3>Manage Classes & Staff</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 24px;">
+              <div>
+                <h4>Classes</h4>
+                <div class="form-group">
+                  <input type="text" id="new-class" placeholder="New class name">
+                  <button class="btn" onclick="app.addClass()" style="margin-top: 8px;">Add Class</button>
+                </div>
+                <div style="margin-top: 16px;">
+                  ${this.classes.map(cls => `
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px; background: #f7fafc; margin: 4px 0; border-radius: 4px;">
+                      <span>${cls}</span>
+                      <button onclick="app.removeClass('${cls}')" style="background: #f56565; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer;">Remove</button>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+              <div>
+                <h4>Staff</h4>
+                <div class="form-group">
+                  <input type="text" id="new-staff" placeholder="New staff name">
+                  <button class="btn" onclick="app.addStaff()" style="margin-top: 8px;">Add Staff</button>
+                </div>
+                <div style="margin-top: 16px;">
+                  ${this.staff.map(staff => `
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px; background: #f7fafc; margin: 4px 0; border-radius: 4px;">
+                      <span>${staff}</span>
+                      <button onclick="app.removeStaff('${staff}')" style="background: #f56565; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer;">Remove</button>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      setupEventListeners() {
+        // Handle Enter key in login form
+        document.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter' && !this.currentUser) {
+            this.login();
+          }
+        });
+      }
+
+      login() {
+        const username = document.getElementById('username')?.value;
+        const password = document.getElementById('password')?.value;
+        
+        if ((username === 'Principal' && password === 'admin123') || 
+            (username === 'committee' && password === 'committee123')) {
+          this.currentUser = username;
+          this.showNotification('Login successful!', 'success');
+          this.render();
+        } else {
+          this.showNotification('Invalid credentials!', 'error');
+        }
+      }
+
+      logout() {
+        this.currentUser = null;
+        this.currentTab = 'view';
+        this.render();
+      }
+
+      switchTab(tab) {
+        this.currentTab = tab;
+        this.render();
+      }
+
+      showTimetableSelector(type) {
+        const selector = document.getElementById('timetable-selector');
+        const items = type === 'class' ? this.classes : this.staff;
+        
+        selector.innerHTML = `
+          <div style="margin: 16px 0;">
+            <label>Select ${type === 'class' ? 'Class' : 'Staff'}:</label>
+            <select id="view-select" style="margin-left: 8px; padding: 8px;">
+              ${items.map(item => `<option value="${item}">${item}</option>`).join('')}
+            </select>
+            <button class="btn" onclick="app.viewTimetable('${type}')" style="margin-left: 8px;">
+              Show Timetable
+            </button>
+          </div>
+        `;
+      }
+
+      showEditSelector(type) {
+        const selector = document.getElementById('edit-selector');
+        const items = type === 'class' ? this.classes : this.staff;
+        
+        selector.innerHTML = `
+          <div style="margin: 16px 0;">
+            <label>Select ${type === 'class' ? 'Class' : 'Staff'}:</label>
+            <select id="edit-select" style="margin-left: 8px; padding: 8px;">
+              ${items.map(item => `<option value="${item}">${item}</option>`).join('')}
+            </select>
+            <button class="btn" onclick="app.editTimetable('${type}')" style="margin-left: 8px;">
+              Edit Timetable
+            </button>
+          </div>
+        `;
+      }
+
+      viewTimetable(type) {
+        const select = document.getElementById('view-select');
+        const name = select.value;
+        this.displayTimetable(name, false);
+      }
+
+      editTimetable(type) {
+        const select = document.getElementById('edit-select');
+        const name = select.value;
+        this.displayTimetable(name, true);
+      }
+
+      displayTimetable(name, editable = false) {
+        if (!this.timetables[name]) {
+          this.timetables[name] = this.days.map(() => this.timeSlots.map(() => '-'));
+        }
+
+        const container = editable ? document.getElementById('edit-display') : document.getElementById('timetable-display');
+        const data = this.timetables[name];
+        
+        let html = `
+          <div class="timetable-grid">
+            <h4>${name} Timetable</h4>
+            <table class="timetable">
+              <thead>
+                <tr>
+                  <th>Day / Time</th>
+                  ${this.timeSlots.map(slot => `<th>${slot}</th>`).join('')}
+                </tr>
+              </thead>
+              <tbody>
+                ${data.map((row, dayIndex) => `
+                  <tr>
+                    <th>${this.days[dayIndex]}</th>
+                    ${row.map((cell, slotIndex) => `
+                      <td>
+                        ${editable ? 
+                          `<input type="text" value="${cell}" 
+                           onchange="app.updateCell('${name}', ${dayIndex}, ${slotIndex}, this.value)"
+                           style="width: 100%; border: 1px solid #e2e8f0; padding: 4px; border-radius: 4px;">` 
+                          : cell}
+                      </td>
+                    `).join('')}
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+            ${editable ? `<button class="btn" onclick="app.saveTimetable('${name}')" style="margin-top: 16px;">Save Changes</button>` : ''}
+          </div>
+        `;
+        
+        container.innerHTML = html;
+      }
+
+      updateCell(name, dayIndex, slotIndex, value) {
+        if (!this.timetables[name]) {
+          this.timetables[name] = this.days.map(() => this.timeSlots.map(() => '-'));
+        }
+        this.timetables[name][dayIndex][slotIndex] = value;
+      }
+
+      saveTimetable(name) {
+        this.saveData();
+        this.showNotification('Timetable saved successfully!', 'success');
+      }
+
+      addClass() {
+        const input = document.getElementById('new-class');
+        const name = input.value.trim();
+        
+        if (name && !this.classes.includes(name)) {
+          this.classes.push(name);
+          input.value = '';
+          this.saveData();
+          this.renderTabContent();
+          this.showNotification('Class added successfully!', 'success');
+        }
+      }
+
+      removeClass(name) {
+        this.classes = this.classes.filter(cls => cls !== name);
+        delete this.timetables[name];
+        this.saveData();
+        this.renderTabContent();
+        this.showNotification('Class removed successfully!', 'success');
+      }
+
+      addStaff() {
+        const input = document.getElementById('new-staff');
+        const name = input.value.trim();
+        
+        if (name && !this.staff.includes(name)) {
+          this.staff.push(name);
+          input.value = '';
+          this.saveData();
+          this.renderTabContent();
+          this.showNotification('Staff added successfully!', 'success');
+        }
+      }
+
+      removeStaff(name) {
+        this.staff = this.staff.filter(staff => staff !== name);
+        delete this.timetables[name];
+        this.saveData();
+        this.renderTabContent();
+        this.showNotification('Staff removed successfully!', 'success');
+      }
+
+      showNotification(message, type = 'success') {
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        notification.textContent = message;
+        document.body.appendChild(notification);
+        
+        setTimeout(() => notification.classList.add('show'), 100);
+        setTimeout(() => {
+          notification.classList.remove('show');
+          setTimeout(() => document.body.removeChild(notification), 300);
+        }, 3000);
+      }
+    }
+
+    // Initialize the app
+    window.app = new TimetableManager();
+  </script>
+</body>
+</html>
